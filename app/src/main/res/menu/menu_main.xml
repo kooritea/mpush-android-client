@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kooritea.mpush.MainActivity">
+    <item
+        android:id="@+id/settings"
+        android:title="设置"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/clear"
+        android:title="清除数据"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/exit"
+        android:title="退出"
+        android:orderInCategory="300"
+        app:showAsAction="never"/>
+</menu>
