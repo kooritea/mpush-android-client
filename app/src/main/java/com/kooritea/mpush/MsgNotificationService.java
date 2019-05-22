@@ -84,7 +84,7 @@ public class MsgNotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         int retVal = super.onStartCommand(intent, flags, startId);
-//        Log.e("service","onStartCommand");
+        Log.e("service","onStartCommand");
         return retVal;
     }
     @Override
