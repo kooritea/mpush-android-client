@@ -306,15 +306,22 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.exit) {
-            Intent intent2 = new Intent(MainActivity.this, MsgNotificationService.class);
+            //退出服务
+            Intent intent2 = new Intent(this, MsgNotificationService.class);
             stopService(intent2);
+            try{
+                msgNotifService.exit(0);
+            }catch(Exception e){
+                toast("退出消息服务失败\n请从任务管理器中结束进程");
+            }
+
+            //取消心跳检查
             AlarmManager aManager=(AlarmManager)getSystemService(Service.ALARM_SERVICE);
-            //用于取消的
             Intent intent = new Intent(this, CheckLiveReceiver.class);
             intent.setAction("com.kooritea.mpush.LIVE");
-            // 创建PendingIntent对象
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
             aManager.cancel(pendingIntent);
+
             System.exit(0);
             return true;
         }
@@ -328,8 +335,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // 点击“确认”后的操作
-                    SettingManager settingManager = new SettingManager(MainActivity.this);
-                    settingManager.writeFileData("setting","");
+//                    SettingManager settingManager = new SettingManager(MainActivity.this);
+//                    settingManager.writeFileData("setting","");
                     localMsgManager.clearData();
                     messageList = new ArrayList<>();
                     showList();

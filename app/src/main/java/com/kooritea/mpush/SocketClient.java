@@ -159,6 +159,15 @@ public class SocketClient extends WebSocketClient {
     public boolean getNeedReload(){
         return needReload;
     }
+    public String getUrl(){
+        return url;
+    }
+    public String getToken(){
+        return token;
+    }
+    public String getDevice(){
+        return device;
+    }
     private void toast(String text){
         toastData = text;
         context.cachedThreadPool.execute(new Runnable() {

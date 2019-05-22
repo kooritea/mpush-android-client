@@ -131,13 +131,12 @@ public class MsgNotificationService extends Service {
 
     }
     public void onSocketClose(SocketClient ws){
-        final String url = ws.url;
-        final String token = ws.token;
-        final String device = ws.device;
         final SocketClient wws = ws;
         try{
             ws.close();
-            Log.e("websocket","准备重连" + ws.url);
+            if(ws.getNeedReload()){
+                Log.e("websocket","准备重连" + ws.url);
+            }
             cachedThreadPool.execute(new Runnable() {
                 public void run() {
                     try{
@@ -147,7 +146,7 @@ public class MsgNotificationService extends Service {
                     }
                     Looper.prepare();
                     if(wws.getNeedReload()){
-                        client = new SocketClient(MsgNotificationService.this, url, token ,device, true);
+                        client = new SocketClient(MsgNotificationService.this, wws.getUrl(), wws.getToken() ,wws.getDevice(), true);
                     }
                     Looper.loop();
                 }
@@ -158,9 +157,11 @@ public class MsgNotificationService extends Service {
     }
     public void reConnection(){
         Log.e("reConnection","重新设置");
+        Log.e("URL",settingManager.getSetting("URL"));
+        Log.e("TOKEN",settingManager.getSetting("TOKEN"));
+        Log.e("DEVICE",settingManager.getSetting("DEVICE"));
         client.close(false);
-//        client.userClose(false);
-//        client = new SocketClient(MsgNotificationService.this, settingManager.getSetting("URL"), settingManager.getSetting("TOKEN") ,settingManager.getSetting("DEVICE"), false);
+
         client = new SocketClient(MsgNotificationService.this, settingManager.getSetting("URL"), settingManager.getSetting("TOKEN") ,settingManager.getSetting("DEVICE"), false);
 
     }
