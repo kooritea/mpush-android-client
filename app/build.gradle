@@ -6,14 +6,13 @@ android {
         applicationId "com.kooritea.mpush"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 14
-        versionName "0.14"
+        versionCode 15
+        versionName "0.15"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
             minifyEnabled false
-            buildConfigField 'String', 'WS_NAME', '"test"'
         }
         release {
             minifyEnabled true

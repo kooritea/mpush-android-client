@@ -35,6 +35,8 @@ public class SocketClient extends WebSocketClient {
     public String token;
     public String device;
 
+    private boolean isOpen=false;
+
     SocketClient(MsgNotificationService context, String serverUri, String token, String device,  boolean isReload) {
         super(URI.create(serverUri));
         this.context = context;
@@ -43,12 +45,12 @@ public class SocketClient extends WebSocketClient {
         this.device = device;
         this.url = serverUri;
         setConnectionLostTimeout(300000);
-        log( "open" );
         connect();
     }
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         log( "opened connection" );
+        isOpen = true;
         send(this.token);
     }
     public void onMessage(String messageStr) {
@@ -138,9 +140,12 @@ public class SocketClient extends WebSocketClient {
     @Override
     public void onError(Exception ex) {
         ex.printStackTrace();
-        toast("连接websocket服务器出错");
+        if(!isOpen){//在打开前出错
+            toast("连接websocket服务器出错\n" + ex.toString());
+        }
         isAlive = false;
         destroy = true;
+
     }
     public void close(boolean needReload) {
         this.needReload = needReload;
