@@ -26,3 +26,9 @@
 
 # 三、下载
 [发布页](https://github.com/kooritea/mpush-android-client/releases)可以下载编译好的APK
+
+# 四、预览
+![1](https://ww2.sinaimg.cn/large/007eZ24Wgy1g3e1no5xd7j30dg0mbmxz)
+![2](https://ww2.sinaimg.cn/large/007eZ24Wgy1g3e1o3cw7jj30df0lp3ym)
+![3](https://ww2.sinaimg.cn/large/007eZ24Wgy1g3e1oeqk7rj30dk0lpwep)
+![4](https://ww2.sinaimg.cn/large/007eZ24Wgy1g3e1ojz6iwj30dg0ltwfa)
