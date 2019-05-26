@@ -9,7 +9,7 @@ interface MsgNotifService {
      * Demonstrates some basic types that you can use as parameters
      * and return values in AIDL.
      */
-    void pushMsg(String title, String content, String time);
+//    void pushMsg(String title, String content, String time);
     void cancelNotif();
     void reConnection();
 //    boolean pullMsg();

@@ -88,7 +88,7 @@ public class SocketClient extends WebSocketClient {
                         midList.put(mid);
                         context.localMsgManager.saveLocalMsglist(msgList.getJSONObject(i).toString());
                         Message m = new Message(msgList.getJSONObject(i));
-                        context.pushMsg(m.getTitle(),m.getContent(),m.getTime());
+                        context.pushMsg(m);
                     }
                     JSONObject replyData = new JSONObject();
                     replyData.put("midList",midList);

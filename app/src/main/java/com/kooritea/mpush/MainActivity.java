@@ -270,13 +270,13 @@ public class MainActivity extends AppCompatActivity {
             cm.setPrimaryClip(mClipData);
         }
     }
-    private void pushMsg(String title, String content, String time){
-        try{
-            msgNotifService.pushMsg(title,content,time);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void pushMsg(String title, String content, String time){
+//        try{
+//            msgNotifService.pushMsg(title,content,time);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);

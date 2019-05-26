@@ -34,9 +34,9 @@ public class MsgNotificationService extends Service {
     public class MsgNotifBinder extends MsgNotifService.Stub {
 
         //推送一条通知到通知栏
-        public void pushMsg(String title, String content, String time){
-            MsgNotificationService.this.pushMsg(title,content,time);
-        }
+//        public void pushMsg(String title, String content, String time){
+//            MsgNotificationService.this.pushMsg(title,content,time);
+//        }
         public void cancelNotif(){
             MsgNotificationService.this.cancelNotif();
         }
@@ -94,15 +94,26 @@ public class MsgNotificationService extends Service {
         }
         return iBinder;
     }
-    public void pushMsg(String title, String content, String time){
+    public void pushMsg(Message msg){
         NotificationCompat.Builder builder =  new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(title)
-                .setContentText(content);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        switch(msg.getStatus()){
+            case 1:
+                builder.setContentTitle(msg.getTitle());
+                break;
+            case 2:
+                builder.setContentTitle("消息通知");
+                builder.setContentText(msg.getContent());
+                break;
+            case 3:
+                builder.setContentTitle(msg.getTitle());
+                builder.setContentText(msg.getContent());
+                break;
+        }
         Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("title",title);
-        intent.putExtra("content",content);
-        intent.putExtra("time",time);
+        intent.putExtra("title", msg.getTitle());
+        intent.putExtra("content",msg.getContent());
+        intent.putExtra("time",msg.getTime());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(intent);
@@ -117,7 +128,7 @@ public class MsgNotificationService extends Service {
         NotificationManager nm = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        int id = (int) (System.currentTimeMillis() / 1000);
+        int id = (int) (System.currentTimeMillis());
 //        notifIds.add(String.valueOf(id));
         nm.notify(id,notification);
     }

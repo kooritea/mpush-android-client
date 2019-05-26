@@ -44,13 +44,13 @@ public class Message {
 
     public int getStatus() {
         if(hasTitle() && !hasContent()){
-            return 1;
+            return 1;//只有title
         }else if(!hasTitle() && hasContent()){
-            return 2;
+            return 2;//只有content
         }else if(hasTitle() && hasContent()){
-            return 3;
+            return 3;//都有
         }else{
-            return 0;
+            return 0;//都没
         }
     }
 
