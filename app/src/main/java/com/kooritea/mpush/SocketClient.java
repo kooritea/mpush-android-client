@@ -24,8 +24,6 @@ public class SocketClient extends WebSocketClient {
 
     public boolean isAlive = false;
 
-    private boolean destroy = false;
-
     private boolean isReload;
 
     private boolean needReload = true;
@@ -34,6 +32,8 @@ public class SocketClient extends WebSocketClient {
     public String url;
     public String token;
     public String device;
+
+    private int reConnectionSleepTime;
 
     private boolean isOpen=false;
 
@@ -44,6 +44,7 @@ public class SocketClient extends WebSocketClient {
         this.token = token;
         this.device = device;
         this.url = serverUri;
+        reConnectionSleepTime = 5000;
         setConnectionLostTimeout(300000);
         connect();
     }
@@ -52,6 +53,7 @@ public class SocketClient extends WebSocketClient {
         log( "opened connection" );
         isOpen = true;
         send(this.token);
+        reConnectionSleepTime = 5000;
     }
     public void onMessage(String messageStr) {
         try{
@@ -107,24 +109,26 @@ public class SocketClient extends WebSocketClient {
 
 
     private void sendHeart(){
-        if(destroy) return;
+        log("try send ping");
+        if(!needReload) return;
         try{
             if(isAlive) {
-//                log("send ping");
+                log("send ping");
                 sendPing();
             }
             context.cachedThreadPool.execute(new Runnable() {
                 public void run() {
-                    try{
-                        Thread.sleep(60000);
-                    }catch (Exception e ){
-                        Log.e("send Heart error",e.toString());
-                    }
-                    Looper.prepare();
-                    sendHeart();
-                    Looper.loop();
+                try{
+                    Thread.sleep(60000);
+                }catch (Exception e ){
+                    Log.e("send Heart error",e.toString());
+                }
+                Looper.prepare();
+                sendHeart();
+                Looper.loop();
                 }
             });
+
         }catch(Exception e){
             Log.e("send Heart error",e.toString());
         }
@@ -133,7 +137,6 @@ public class SocketClient extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         isAlive = false;
-        destroy = true;
         log(  "Connection closed by " + ( remote ? "remote peer" : "us" ) );
         context.onSocketClose(this);
     }
@@ -144,8 +147,9 @@ public class SocketClient extends WebSocketClient {
             toast("连接websocket服务器出错\n" + ex.toString());
         }
         isAlive = false;
-        destroy = true;
-
+        if(reConnectionSleepTime < 60000){
+            reConnectionSleepTime += 5000;
+        }
     }
     public void close(boolean needReload) {
         this.needReload = needReload;
@@ -159,14 +163,17 @@ public class SocketClient extends WebSocketClient {
     public boolean getNeedReload(){
         return needReload;
     }
-    public String getUrl(){
-        return url;
-    }
-    public String getToken(){
-        return token;
-    }
-    public String getDevice(){
-        return device;
+//    public String getUrl(){
+//        return url;
+//    }
+//    public String getToken(){
+//        return token;
+//    }
+//    public String getDevice(){
+//        return device;
+//    }
+    public int getReConnectionSleepTime(){
+        return reConnectionSleepTime;
     }
     private void toast(String text){
         toastData = text;

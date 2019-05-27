@@ -146,18 +146,18 @@ public class MsgNotificationService extends Service {
         try{
             ws.close();
             if(ws.getNeedReload()){
-                Log.e("websocket","准备重连" + ws.url);
+                Log.e("websocket",ws.getReConnectionSleepTime() + "s后重连" + ws.url);
             }
             cachedThreadPool.execute(new Runnable() {
                 public void run() {
                     try{
-                        Thread.sleep(5000);
+                        Thread.sleep(wws.getReConnectionSleepTime());
                     }catch (Exception e ){
                         Log.e("SocketService",e.toString());
                     }
                     Looper.prepare();
                     if(wws.getNeedReload()){
-                        client = new SocketClient(MsgNotificationService.this, wws.getUrl(), wws.getToken() ,wws.getDevice(), true);
+                        wws.reconnect();
                     }
                     Looper.loop();
                 }
@@ -172,8 +172,8 @@ public class MsgNotificationService extends Service {
         Log.e("TOKEN",settingManager.getSetting("TOKEN"));
         Log.e("DEVICE",settingManager.getSetting("DEVICE"));
         client.close(false);
-
         client = new SocketClient(MsgNotificationService.this, settingManager.getSetting("URL"), settingManager.getSetting("TOKEN") ,settingManager.getSetting("DEVICE"), false);
+        Runtime.getRuntime().gc();
 
     }
     public void setMainIsPull(boolean status){
