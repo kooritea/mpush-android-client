@@ -1,5 +1,6 @@
 package com.kooritea.mpush;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,6 +33,8 @@ public class SocketClient extends WebSocketClient {
     public String url;
     public String token;
     public String device;
+
+    private Handler handler;
 
     private int reConnectionSleepTime;
 
@@ -123,9 +126,9 @@ public class SocketClient extends WebSocketClient {
                 }catch (Exception e ){
                     Log.e("send Heart error",e.toString());
                 }
-                Looper.prepare();
+//                Looper.prepare();
                 sendHeart();
-                Looper.loop();
+//                Looper.loop();
                 }
             });
 
@@ -177,14 +180,12 @@ public class SocketClient extends WebSocketClient {
     }
     private void toast(String text){
         toastData = text;
-        context.cachedThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
+        handler=new Handler(Looper.getMainLooper());
+        handler.post(new Runnable(){
+            public void run(){
                 Toast toast = Toast.makeText(context, null, Toast.LENGTH_LONG);
                 toast.setText(toastData);
                 toast.show();
-                Looper.loop();
             }
         });
     }

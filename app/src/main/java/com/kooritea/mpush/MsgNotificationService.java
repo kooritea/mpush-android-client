@@ -8,6 +8,7 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
@@ -29,6 +30,7 @@ public class MsgNotificationService extends Service {
     public ExecutorService cachedThreadPool;
 //    private List<String> notifIds = new ArrayList<>();//储存通知的id
     private String toastData;
+    private Handler handler;
     private SettingManager settingManager = new SettingManager(this);
     public LocalMsgManager localMsgManager = new LocalMsgManager(this);
     public class MsgNotifBinder extends MsgNotifService.Stub {
@@ -155,11 +157,11 @@ public class MsgNotificationService extends Service {
                     }catch (Exception e ){
                         Log.e("SocketService",e.toString());
                     }
-                    Looper.prepare();
+//                    Looper.prepare();
                     if(wws.getNeedReload()){
                         wws.reconnect();
                     }
-                    Looper.loop();
+//                    Looper.loop();
                 }
             });
         }catch (Exception e ){
@@ -181,14 +183,12 @@ public class MsgNotificationService extends Service {
     }
     private void toast(String text){
         toastData = text;
-        cachedThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
+        handler=new Handler(Looper.getMainLooper());
+        handler.post(new Runnable(){
+            public void run(){
                 Toast toast = Toast.makeText(MsgNotificationService.this, null, Toast.LENGTH_LONG);
                 toast.setText(toastData);
                 toast.show();
-                Looper.loop();
             }
         });
     }

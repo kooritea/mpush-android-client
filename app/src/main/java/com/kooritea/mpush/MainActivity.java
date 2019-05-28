@@ -145,13 +145,13 @@ public class MainActivity extends AppCompatActivity {
                             }catch (Exception e ){
 
                             }
-                            Looper.prepare();
+//                            Looper.prepare();
                             try{
                                 msgNotifService.cancelNotif();
                             }catch (Exception e ){
 
                             }
-                            Looper.loop();
+//                            Looper.loop();
                         }
                     });
                 }
