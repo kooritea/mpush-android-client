@@ -15,9 +15,7 @@ import org.json.JSONException;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private String title;
-    private String content;
-    private String time;
+    private Message message;
     private boolean isTop;
 
     @Override
@@ -30,10 +28,10 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         try {
             isTop = intent.getStringExtra("isTop") == null;
-            Message message = new Message(intent.getStringExtra("message"));
-            title = message.getData().getText();
-            content = message.getData().getDesp();
-            time = message.getTime();
+            message = new Message(intent.getStringExtra("message"));
+            String title = message.getData().getText();
+            String content = message.getData().getDesp();
+            String time = message.getTime();
             boolean hasTitle = title != null && title.length()>0;
             boolean hasContent = content != null && content.length()>0;
 
@@ -60,6 +58,16 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(message.getData().getExtra().getScheme() != null){
+            menu.add(0,0,0,"打开链接").setOnMenuItemClickListener(mOnMenuItemClickListener);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -74,6 +82,19 @@ public class DetailActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    private MenuItem.OnMenuItemClickListener mOnMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case 0:
+                    startActivity(new Intent(Intent.ACTION_VIEW, message.getData().getExtra().getScheme()));
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+    };
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {

@@ -1,5 +1,6 @@
 package com.kooritea.mpush.model;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import org.json.JSONException;
@@ -56,15 +57,45 @@ public class Message {
     public class Data {
         private String text;
         private String desp;
-        private JSONObject extra;
+        private Extra extra;
+
+        public class Extra{
+            private Uri scheme;
+
+            public Extra(){
+                scheme = null;
+            }
+            public Extra(JSONObject data) {
+                try {
+                    scheme = Uri.parse(data.getString("scheme"));
+                } catch (JSONException e) {
+                    scheme = null;
+                }
+            }
+            public Uri getScheme() {
+                return scheme;
+            }
+
+            public void setScheme(Uri scheme) {
+                this.scheme = scheme;
+            }
+        }
 
         public Data(JSONObject data) {
             try{
                 text = data.getString("text");
-                desp = data.getString("desp");
-                extra = data.getJSONObject("extra");
             }catch(Exception e){
-                e.printStackTrace();
+                text = "";
+            }
+            try{
+                desp = data.getString("desp");
+            }catch(Exception e){
+                desp = "";
+            }
+            try{
+                extra = new Extra(data.getJSONObject("extra"));
+            }catch(Exception e){
+                extra = new Extra();
             }
         }
 
@@ -84,12 +115,12 @@ public class Message {
             this.desp = desp;
         }
 
-        public JSONObject getExtra() {
+        public Extra getExtra() {
             return extra;
         }
 
         public void setExtra(JSONObject extra) {
-            this.extra = extra;
+            this.extra = new Extra(extra);
         }
     }
 

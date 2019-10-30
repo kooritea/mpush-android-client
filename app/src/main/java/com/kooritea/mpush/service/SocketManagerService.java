@@ -9,6 +9,7 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -97,7 +98,12 @@ public class SocketManagerService extends Service {
                 builder.setContentText(message.getData().getDesp());
                 break;
         }
-        Intent intent = new Intent(this, DetailActivity.class);
+        Intent intent;
+        if(message.getData().getExtra().getScheme() != null){
+            intent = new Intent(Intent.ACTION_VIEW, message.getData().getExtra().getScheme());
+        }else{
+            intent = new Intent(this, DetailActivity.class);
+        }
         intent.putExtra("message",message.toString());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
