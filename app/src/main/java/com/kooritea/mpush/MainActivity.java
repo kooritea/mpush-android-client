@@ -1,8 +1,5 @@
 package com.kooritea.mpush;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -15,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.kooritea.mpush.receiver.KeepLiveReceiver;
 import com.kooritea.mpush.service.SocketManagerService;
 import com.kooritea.mpush.ui.main.SectionsPagerAdapter;
 

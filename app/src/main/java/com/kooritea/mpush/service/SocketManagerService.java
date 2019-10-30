@@ -9,12 +9,10 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.kooritea.mpush.DetailActivity;
@@ -25,7 +23,6 @@ import com.kooritea.mpush.model.Message;
 import com.kooritea.mpush.module.LocalMsgManager;
 import com.kooritea.mpush.module.MpushWSClient;
 import com.kooritea.mpush.module.SettingManager;
-import com.kooritea.mpush.receiver.KeepLiveReceiver;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -121,9 +118,16 @@ public class SocketManagerService extends Service {
     }
 
     public void newMessage(Message message){
+        if(localMsgManager.readLocalMsgList().size() != 0 ){
+            Message lastMessage = localMsgManager.readLocalMsgList().get(localMsgManager.readLocalMsgList().size()-1);
+            if(message.getMid().equals(lastMessage.getMid())){
+               return;
+            }
+        }
         pushNotification(message);
         localMsgManager.saveLocalMsglist(message);
         context.sendBroadcast(new Intent("com.kooritea.mpush.MESSAGE"));
+
     }
 
     public void toast(String text){
