@@ -9,7 +9,6 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -132,7 +131,9 @@ public class SocketManagerService extends Service {
         }
         pushNotification(message);
         localMsgManager.saveLocalMsglist(message);
-        context.sendBroadcast(new Intent("com.kooritea.mpush.MESSAGE"));
+        Intent intent = new Intent("com.kooritea.mpush.MESSAGE");
+        intent.putExtra("message",message.toString());
+        context.sendBroadcast(intent);
 
     }
 

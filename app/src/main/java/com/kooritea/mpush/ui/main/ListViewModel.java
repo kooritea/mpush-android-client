@@ -27,6 +27,10 @@ import com.kooritea.mpush.R;
 import com.kooritea.mpush.model.Message;
 import com.kooritea.mpush.module.LocalMsgManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -51,7 +55,7 @@ public class ListViewModel {
         this.view = view;
         this.localMsgManager = LocalMsgManager.create(context);
         ListView listView = view.findViewById(R.id.listView);
-        messageList = localMsgManager.readLocalMsgList();
+        messageList = new ArrayList<>(localMsgManager.readLocalMsgList());
 
         listViewAdapter = new MsgListAdapter(
                 context,
@@ -99,7 +103,12 @@ public class ListViewModel {
         @Override
         public void onReceive(Context RecContext, Intent intent) {
             if (intent.getAction().equals("com.kooritea.mpush.MESSAGE")) {
-                listViewAdapter.notifyDataSetChanged();
+                try {
+                    messageList.add(new Message(new JSONObject(intent.getStringExtra("message"))));
+                    listViewAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 context.cachedThreadPool.execute(new Runnable() {
                     public void run() {
                         try{
