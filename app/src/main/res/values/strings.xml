@@ -2,4 +2,6 @@
     <string name="app_name">Mpush</string>
     <string name="tab_text_1">消息</string>
     <string name="tab_text_2">送信</string>
+    <string name="channel_name">Notification</string>
+    <string name="channel_description">None</string>
 </resources>
