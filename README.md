@@ -1,8 +1,9 @@
 # Mpush 安卓客户端2.0
 
-- 适配Mpush2.0(不兼容mpush1.0)
+- 适配Mpush(2.0、2.1)(不兼容mpush1.0)
 - 和1.0客户端几乎没有太大变化
 - 稍微降低了一点内存占用
+- 不推荐在安卓7.1以上运行，7.1以上请用[3.0](https://github.com/kooritea/mpush-android-client/tree/3.x)
 
 ## Todo
 - []markdown

@@ -6,8 +6,8 @@ android {
         applicationId "com.kooritea.mpush"
         minSdkVersion 24
         targetSdkVersion 28
-        versionCode 22
-        versionName "2.0.1"
+        versionCode 23
+        versionName "2.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
