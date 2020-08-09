@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mpush</string>
+    <string name="tab_text_1">消息</string>
+    <string name="tab_text_2">发送</string>
+</resources>
