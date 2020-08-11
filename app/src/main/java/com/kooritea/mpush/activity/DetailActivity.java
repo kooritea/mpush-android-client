@@ -82,7 +82,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         try{
-            if(message.getData().getExtra().getString("scheme")!= null){
+            if(message.getData().getExtra().getString("scheme").length() > 0){
                 menu.add(0,0,0,"打开链接").setOnMenuItemClickListener(mOnMenuItemClickListener);
                 return true;
             }else{
@@ -98,11 +98,15 @@ public class DetailActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case 0:
                     try{
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(message.getData().getExtra().getString("scheme"))));
+                        if(message.getData().getExtra().getString("scheme").length() > 0){
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Uri.decode(message.getData().getExtra().getString("scheme")))));
+                            return true;
+                        }else{
+                            return false;
+                        }
                     }catch (JSONException ex){
                         return false;
                     }
-                    break;
                 default:
                     break;
             }

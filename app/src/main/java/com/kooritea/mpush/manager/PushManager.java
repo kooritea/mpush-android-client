@@ -82,12 +82,19 @@ public class PushManager {
             builder.setContentTitle(message.getData().getText());
         }
         if(message.getData().getDesp().length() > 0){
-            builder.setContentText(message.getData().getDesp());
+            NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+            bigTextStyle.bigText(message.getData().getDesp());
+            builder.setStyle(bigTextStyle);
         }
 
         Intent intent;
         try{
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getData().getExtra().getString("scheme")));
+            if(message.getData().getExtra().getString("scheme").length() > 0){
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Uri.decode(message.getData().getExtra().getString("scheme"))));
+            }else{
+                throw new JSONException("scheme is empty String");
+            }
+
         }catch (JSONException ex){
             intent = new Intent(this.context, DetailActivity.class);
             intent.putExtra("message",message.toString());
