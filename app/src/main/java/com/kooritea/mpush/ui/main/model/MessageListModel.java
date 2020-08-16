@@ -71,7 +71,7 @@ public class MessageListModel extends ViewModel {
         String title = message.getData().getText();
         List<Message> contentList = this.getContentList(title);
         contentList.remove(message);
-        this.localMessageManager.deleteMsg(message.getMid(),true);
+        this.localMessageManager.deleteMsg(message.getMid());
         if(contentList.size() == 0){
             this.contentListMap.remove(title);
             for(TitleItem titleItem : this.titleListData){
@@ -89,9 +89,8 @@ public class MessageListModel extends ViewModel {
         List<Message> contentList = this.contentListMap.get(title);
         if(contentList != null){
             for(Message message : contentList){
-                this.localMessageManager.deleteMsg(message.getMid(),false);
+                this.localMessageManager.deleteMsg(message.getMid());
             }
-            this.localMessageManager.saveToFile();
             this.contentListMap.remove(title);
             for(TitleItem titleItem : this.titleListData){
                 if(title.equals(titleItem.title)){

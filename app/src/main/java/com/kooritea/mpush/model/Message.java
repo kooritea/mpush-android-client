@@ -1,5 +1,7 @@
 package com.kooritea.mpush.model;
 
+import com.kooritea.mpush.database.entity.MessageEntity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +36,19 @@ public class Message {
             }
         }
 
+        public From(String method, String name){
+            if(method == null){
+                this.method = "unknown";
+            }else{
+                this.method = method;
+            }
+            if(name == null){
+                this.name = "anonymous";
+            }else{
+                this.name = name;
+            }
+        }
+
         public String getMethod() {
             return method == null ? "unknown" : method;
         }
@@ -64,6 +79,18 @@ public class Message {
                 extra = data.getJSONObject("extra");
             }catch(Exception e){
                 e.printStackTrace();
+            }
+        }
+        public Data(String text, String desp, String extra){
+            this.text = text == null ?"":text;
+            this.desp = desp == null ?"":desp;
+            try{
+                this.extra = new JSONObject(extra);
+                if(this.extra == null){
+                    this.extra = new JSONObject();
+                }
+            }catch (JSONException ex){
+                this.extra = new JSONObject();
             }
         }
 
@@ -110,6 +137,31 @@ public class Message {
         data = new Data(origin.getJSONObject("message"));
     }
 
+    public Message(MessageEntity entity){
+        this.sendType = entity.sendType == null ?"":entity.sendType;
+        this.target = entity.target == null ?"":entity.target;
+        this.mid = entity.mid == null ?"":entity.mid;
+        this.from = new From(entity.fromMethod,entity.fromName);
+        this.data = new Data(entity.text,entity.desp,entity.extra);
+        this.origin = new JSONObject();
+        try {
+            this.origin.put("sendType",this.sendType);
+            this.origin.put("target",this.target);
+            this.origin.put("mid",this.mid);
+            JSONObject from = new JSONObject();
+            from.put("method",this.from.method);
+            from.put("name",this.from.name);
+            this.origin.put("from",from);
+            JSONObject data = new JSONObject();
+            data.put("text",this.data.text);
+            data.put("desp",this.data.desp);
+            data.put("extra",this.data.extra);
+            this.origin.put("message",data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public String getSendType() {
         return sendType;
@@ -164,5 +216,18 @@ public class Message {
     @Override
     public String toString() {
         return origin.toString();
+    }
+
+    public MessageEntity toEntity(){
+        MessageEntity entity = new MessageEntity();
+        entity.sendType = this.sendType;
+        entity.target = this.target;
+        entity.mid = this.mid;
+        entity.fromMethod = this.from.method;
+        entity.fromName = this.from.name;
+        entity.text = this.data.getText();
+        entity.desp = this.data.getDesp();
+        entity.extra = this.data.getExtra().toString();
+        return entity;
     }
 }

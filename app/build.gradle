@@ -26,6 +26,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation "org.java-websocket:Java-WebSocket:1.4.0"
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         try {
             isTop = intent.getStringExtra("isTop") == null;
+            Log.d("debug",intent.getStringExtra("message"));
             Message message = new Message(intent.getStringExtra("message"));
             this.message = message;
             title = message.getData().getText();

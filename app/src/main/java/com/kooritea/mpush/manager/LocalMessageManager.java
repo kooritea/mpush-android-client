@@ -3,20 +3,23 @@ package com.kooritea.mpush.manager;
 import android.content.Context;
 import android.util.Log;
 
-import com.kooritea.mpush.model.Message;
+import androidx.room.Room;
 
-import org.json.JSONObject;
+import com.kooritea.mpush.database.AppDatabase;
+import com.kooritea.mpush.database.entity.MessageEntity;
+import com.kooritea.mpush.model.Message;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocalMessageManager  extends FileManager {
-    private static String FILENAME = "messages.json";
+public class LocalMessageManager {
     private static LocalMessageManager instance;
+    private AppDatabase.MessageDao messageDao;
     private List<Message> messageListCache;
 
     private LocalMessageManager(Context context) {
-        super(context);
+        this.messageDao = Room.databaseBuilder(context,
+                AppDatabase.class, "mpush-database").allowMainThreadQueries().fallbackToDestructiveMigration().build().messageDao();
     }
 
     public static LocalMessageManager getInstance(Context context){
@@ -27,56 +30,27 @@ public class LocalMessageManager  extends FileManager {
     }
 
     public List<Message> readLocalMsgList(){
-        if(messageListCache == null){
-            messageListCache = new ArrayList<>();
-            String raw = readFileData(FILENAME);
-            String[] data = raw.split("\n");
-            if(!data[0].equals("")){
-                for (int i = 0; i < data.length; i++) {
-                    try{
-                        JSONObject msg = new JSONObject(data[i]);
-                        Message message = new Message(msg);//给实体类赋值
-                        messageListCache.add(message);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                }
+        if(this.messageListCache == null){
+            this.messageListCache = new ArrayList<>();
+            List<MessageEntity> entityList = this.messageDao.getAll();
+            for(MessageEntity entity : entityList){
+                messageListCache.add(new Message(entity));
             }
         }
-
         return messageListCache;
     }
 
     public void saveLocalMsglist(Message message){
-        if(messageListCache == null){
-            readLocalMsgList();
-        }
         messageListCache.add(message);
-        appendFileData(FILENAME,message.toString() + "\n");
+        this.messageDao.insertAll(message.toEntity());
     }
 
 
-    public void deleteMsg(String mid,Boolean save){
-        for(int i=0;i<messageListCache.size();i++){
-            if(messageListCache.get(i).getMid().equals(mid)){
-                messageListCache.remove(i--);
-                break;
-            }
+    public void deleteMsg(String mid){
+        this.messageDao.delete(this.messageDao.findByMid(mid));
+        for(Message message : this.messageListCache){
+            this.messageListCache.remove(message);
+            break;
         }
-        if(save){
-            this.saveToFile();
-        }
-    }
-
-    public void saveToFile(){
-        writeFileData(FILENAME,"");
-        for(int i=0;i<messageListCache.size();i++){
-            appendFileData(FILENAME,messageListCache.get(i).toString() + "\n");
-        }
-    }
-
-    public void clearData(){
-        messageListCache = new ArrayList<>();
-        writeFileData(FILENAME,"");
     }
 }
