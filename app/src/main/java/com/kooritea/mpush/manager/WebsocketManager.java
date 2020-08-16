@@ -158,6 +158,7 @@ public class WebsocketManager {
             this.settingManager.set("fcmProjectId",authPacket.fcmProjectId);
             this.settingManager.set("fcmApplicationId",authPacket.fcmApplicationId);
             this.settingManager.set("fcmApiKey",authPacket.fcmApiKey);
+            this.settingManager.set("authorization",authPacket.authorization);
             this.needReConnect = true;
             this.wsManagerEventManager.emit("AUTH",authPacket);
             new Timer("websocket-ping").schedule(new TimerTask() {

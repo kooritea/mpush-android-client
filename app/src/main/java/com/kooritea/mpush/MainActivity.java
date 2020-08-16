@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Looper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -123,6 +124,16 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            this.websocketManager.close();
+            this.finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

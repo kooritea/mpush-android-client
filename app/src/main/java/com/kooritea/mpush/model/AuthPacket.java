@@ -11,6 +11,7 @@ public class AuthPacket {
     public String fcmProjectId = "";
     public String fcmApplicationId = "";
     public String fcmApiKey = "";
+    public String authorization = "";
 
     public AuthPacket(JSONObject data) {
         this.origin = data;
@@ -20,6 +21,7 @@ public class AuthPacket {
             this.fcmProjectId = data.getString("fcmProjectId");
             this.fcmApplicationId = data.getString("fcmApplicationId");
             this.fcmApiKey = data.getString("fcmApiKey");
+            this.authorization = data.getString("auth");
         }catch (JSONException ex){
 
         }
