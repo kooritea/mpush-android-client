@@ -179,7 +179,7 @@ public class WebsocketManager {
     }
     private void whenClose(int code){
         if(this.needReConnect && !this.userClose){
-            new Timer("websocket-ping").schedule(new TimerTask() {
+            new Timer("websocket-reconnect").schedule(new TimerTask() {
                  @Override
                  public void run() {
                      mpushSocketClient.reconnect();
@@ -192,7 +192,7 @@ public class WebsocketManager {
     private void whenError(Exception ex){
         ex.printStackTrace();
         if(this.needReConnect && !this.userClose){
-            new Timer("websocket-ping").schedule(new TimerTask() {
+            new Timer("websocket-reconnect").schedule(new TimerTask() {
                 @Override
                 public void run() {
                     mpushSocketClient.reconnect();
@@ -210,7 +210,12 @@ public class WebsocketManager {
         if(this.mpushSocketClient != null){
             this.mpushSocketClient.destory();
         }
-        this.mpushSocketClient = new MpushSocketClient(this.settingManager.get("URL"),this.settingManager.get("TOKEN"),this.settingManager.get("NAME"),this.settingManager.get("GROUP"),this.wsEventManager);
+        try{
+            this.mpushSocketClient = new MpushSocketClient(this.settingManager.get("URL"),this.settingManager.get("TOKEN"),this.settingManager.get("NAME"),this.settingManager.get("GROUP"),this.wsEventManager);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**

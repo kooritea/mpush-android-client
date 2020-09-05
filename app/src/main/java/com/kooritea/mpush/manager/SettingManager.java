@@ -20,11 +20,7 @@ public class SettingManager extends FileManager {
 
     public static SettingManager getInstance(Context context){
         if(instance == null){
-            synchronized(WebsocketManager.class){
-                if(instance == null){
-                    instance = new SettingManager(context);
-                }
-            }
+            instance = new SettingManager(context);
         }
         return instance;
     }

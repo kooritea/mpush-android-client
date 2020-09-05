@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MessageTitleListView {
 
@@ -44,6 +46,8 @@ public class MessageTitleListView {
     private Context context;
     private ListView listView;
     private MessageListModel messageListModel;
+    private Boolean notifyDataSetChangedLock = false;
+    private Timer dataChangeTimer;
 
     public MessageTitleListView(@NonNull LayoutInflater inflater, ViewGroup container, final Context context){
         view = inflater.inflate(R.layout.message_list, container, false);
@@ -68,12 +72,23 @@ public class MessageTitleListView {
         this.messageListModel.ebus.on("data-change", new Observer() {
             @Override
             public void update(Observable o, Object arg) {
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                if(notifyDataSetChangedLock){
+                    dataChangeTimer.cancel();
+                }
+                notifyDataSetChangedLock = true;
+                dataChangeTimer = new Timer("notifyDataSetChanged");
+                dataChangeTimer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        titleListAdapter.notifyDataSetChanged();
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                titleListAdapter.notifyDataSetChanged();
+                                notifyDataSetChangedLock = false;
+                            }
+                        });
                     }
-                });
+                }, 500);
             }
         });
     }
