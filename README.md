@@ -3,7 +3,7 @@
 这个版本只依赖FCM推送，不再在后台保留websocket连接
 只推荐能够稳定连接FCM、安装了edxposed、安卓10的用户使用
 
-## 如果安卓了xposed  
+## 如果安装了xposed  
 请安装这个模块[https://github.com/kooritea/fcmfix](https://github.com/kooritea/fcmfix)  
 并在模块中选中com.kooritea.mpush  
 这能够让fcm的送达率达到100%  
