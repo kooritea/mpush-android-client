@@ -38,7 +38,6 @@ public class FCMService extends FirebaseMessagingService {
         if(this.pushManager == null){
             this.pushManager = new PushManager(this);
         }
-        this.updateToken(settingManager.get("FCM-TOKEN"));
         if (remoteMessage.getData().size() > 0) {
             // 推送中所含的键值对都可以在这里进行获取
             try{

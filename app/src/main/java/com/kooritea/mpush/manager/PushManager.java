@@ -107,7 +107,6 @@ public class PushManager {
 
         builder.setPriority(importance)
             .setAutoCancel(true);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this.context);
-        notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+        this.notificationManager.notify((int) System.currentTimeMillis(), builder.build());
     }
 }
