@@ -1,13 +1,5 @@
 package com.kooritea.mpush.service;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.kooritea.mpush.manager.PushManager;
@@ -25,8 +17,8 @@ import java.net.URL;
 
 public class FCMService extends FirebaseMessagingService {
 
-    private PushManager pushManager;
-    private SettingManager settingManager = SettingManager.getInstance(this);
+    private PushManager pushManager = null;
+    private SettingManager settingManager = null;
 
     /**
      * Notification Message 只有应用在前台才会调用这个方法，在后台时会自动发送通知
@@ -46,13 +38,15 @@ public class FCMService extends FirebaseMessagingService {
             }catch (Exception ex){
                 ex.printStackTrace();
             }
-
         }
     }
 
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
+        if(this.settingManager == null){
+            this.settingManager = SettingManager.getInstance(this);
+        }
         this.settingManager.set("FCM-TOKEN",s);
         this.updateToken(s);
     }
